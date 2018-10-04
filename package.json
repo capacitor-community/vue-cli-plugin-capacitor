@@ -1,0 +1,24 @@
+{
+  "name": "vue-cli-plugin-capacitor",
+  "version": "0.1.0",
+  "description": "A Vue CLI 3 Plugin for Capacitor",
+  "main": "index.js",
+  "repository": "https://github.com/nklayman/vue-cli-plugin-capacitor.git",
+  "author": "Noah Klayman <noahklayman@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "@vue/cli-shared-utils": "^3.0.4",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-promise": "^4.0.0",
+    "eslint-plugin-standard": "^4.0.0",
+    "execa": "^1.0.0",
+    "fs-extra": "^7.0.0",
+    "strip-ansi": "^5.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.6.1"
+  }
+}
