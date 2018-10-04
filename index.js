@@ -56,8 +56,6 @@ module.exports = (api, options) => {
       usage: 'vue-cli-service capacitor:serve --(android|ios)'
     },
     async args => {
-      const stripAnsi = require('strip-ansi')
-
       let platform
       if (args.android && args.ios) {
         throw new Error('Please specify a single platform to develop with')
@@ -104,11 +102,8 @@ module.exports = (api, options) => {
           'Unable to host app on network. This is required to run a dev server on iOS.'
         )
       }
-      capacitorConfig.server.url = networkUrl
-        ? stripAnsi(networkUrl)
-        : // eslint-disable-line
-      // If networkUrl is not available, use fallback that will only work on AVD
-        `http://10.0.2.2${url.match(/:\d{4}\//)[0]}`
+      capacitorConfig.server.url =
+        networkUrl || `http://10.0.2.2${url.match(/:\d{4}\//)[0]}`
       // Write updated config
       if (platform === 'android') {
         await fs.writeFile(

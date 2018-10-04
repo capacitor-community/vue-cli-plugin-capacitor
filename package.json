@@ -15,8 +15,7 @@
     "eslint-plugin-promise": "^4.0.0",
     "eslint-plugin-standard": "^4.0.0",
     "execa": "^1.0.0",
-    "fs-extra": "^7.0.0",
-    "strip-ansi": "^5.0.0"
+    "fs-extra": "^7.0.0"
   },
   "devDependencies": {
     "eslint": "^5.6.1"
