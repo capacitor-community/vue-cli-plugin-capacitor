@@ -62,5 +62,5 @@ To learn more about Capacitor and how to use it, visit [Capacitor's Website](htt
 ### Build
 
 1. Your app is built as normal with `vue-cli-service build`.
-2. The bundled output is copied to the native app with `cap copy [platform]. This runs for each platform specified.
+2. The bundled output is copied to the native app with `cap copy [platform]`. This runs for each platform specified.
 3. The platform's native IDE is opened, allowing you to create a final build of the native app.
