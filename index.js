@@ -11,6 +11,7 @@ module.exports = (api, options) => {
       usage: 'vue-cli-service capacitor:build --(android|ios)'
     },
     async args => {
+      const outputDir = args.dest || pluginOptions.outputDir || 'dest'
       // Uses platforms set in args or installed platforms
       const platforms = []
       if (args.android || args.ios) {
@@ -31,6 +32,8 @@ module.exports = (api, options) => {
 
       // Build app with Vue CLI
       await api.service.run('build', args)
+      // Set web dir to build output
+      setCapacitorConfig('main config', false, api.resolve(outputDir))
       for (const platform of platforms) {
         // Copy app
         await execa('cap', ['copy', platform], {
@@ -68,30 +71,13 @@ module.exports = (api, options) => {
           platform = pluginOptions.defaultPlatform || 'android'
         }
       }
-      // Make sure there is an index.HTMLAllCollection, otherwise Capacitor will crash
-      if (!(await fs.exists(api.resolve('./dist/index.html')))) {
-        await fs.ensureDir(api.resolve('./dist'))
-        await fs.writeFile(api.resolve('./dist/index.html'), '<html></html>')
-      }
+      // Make sure there is an index.html, otherwise Capacitor will crash
+      await fs.ensureFile(api.resolve('./dist/index.html'))
       // Copy app data
       await execa('cap', ['copy', platform])
       // Start dev server
       const { networkUrl, url } = await api.service.run('serve')
-      let capacitorConfig
-      // Tell capacitor to load dev server URL
-      if (platform === 'android') {
-        capacitorConfig = await fs.readFile(
-          api.resolve('./android/app/src/main/assets/capacitor.config.json'),
-          'utf8'
-        )
-      } else {
-        capacitorConfig = await fs.readFile(
-          api.resolve('./ios/App/App/capacitor.config.json'),
-          'utf8'
-        )
-      }
-      capacitorConfig = JSON.parse(capacitorConfig)
-      capacitorConfig.server = capacitorConfig.server || {}
+
       if (!networkUrl && platform === 'android') {
         // AVDs can connect to localhost of host computer
         console.log(
@@ -102,20 +88,10 @@ module.exports = (api, options) => {
           'Unable to host app on network. This is required to run a dev server on iOS.'
         )
       }
-      capacitorConfig.server.url =
+      setCapacitorConfig(
+        platform,
         networkUrl || `http://10.0.2.2${url.match(/:\d{4}\//)[0]}`
-      // Write updated config
-      if (platform === 'android') {
-        await fs.writeFile(
-          api.resolve('./android/app/src/main/assets/capacitor.config.json'),
-          JSON.stringify(capacitorConfig)
-        )
-      } else {
-        await fs.writeFile(
-          api.resolve('./ios/App/App/capacitor.config.json'),
-          JSON.stringify(capacitorConfig)
-        )
-      }
+      )
 
       console.log(
         `\nLaunching ${
@@ -130,6 +106,29 @@ module.exports = (api, options) => {
       process.exit(0)
     }
   )
+  async function setCapacitorConfig (platform, serverUrl, webDir) {
+    let configPath
+    // Read existing config
+    if (platform === 'android') {
+      configPath = './android/app/src/main/assets/capacitor.config.json'
+    } else if (platform === 'ios') {
+      configPath = './ios/App/App/capacitor.config.json'
+    } else {
+      configPath = './capacitor.config.json'
+    }
+    const capacitorConfig = JSON.parse(
+      await fs.readFile(api.resolve(configPath), 'utf8')
+    )
+    if (serverUrl) {
+      capacitorConfig.server = capacitorConfig.server || {}
+      capacitorConfig.server.url = serverUrl
+    }
+    if (webDir) {
+      capacitorConfig.webDir = webDir
+    }
+    // Write updated config
+    await fs.writeFile(api.resolve(configPath), JSON.stringify(capacitorConfig))
+  }
 }
 
 module.exports.defaultModes = {
