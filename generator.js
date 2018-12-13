@@ -27,11 +27,14 @@ module.exports = (api, { capacitor: answers }) => {
         webDir: 'dist'
       })
     )
+    await fs.ensureFile(api.resolve('dist/index.html'))
     for (const platform of answers.platforms) {
       await execa('cap', ['add', platform])
     }
     if (hasYarn()) {
-      await fs.unlink(api.resolve('./package-lock.json'))
+      if (await fs.exists(api.resolve('./package-lock.json'))) {
+        await fs.unlink(api.resolve('./package-lock.json'))
+      }
       await execa('yarn', ['install'])
     }
   })
