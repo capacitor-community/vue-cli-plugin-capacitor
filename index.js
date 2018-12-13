@@ -59,6 +59,7 @@ module.exports = (api, options) => {
       usage: 'vue-cli-service capacitor:serve --(android|ios)'
     },
     async args => {
+      const getLanUrl = require('./util/getLanUrl')
       let platform
       if (args.android && args.ios) {
         throw new Error('Please specify a single platform to develop with')
@@ -76,8 +77,24 @@ module.exports = (api, options) => {
       // Copy app data
       await execa('cap', ['copy', platform])
       // Start dev server
-      const { networkUrl, url } = await api.service.run('serve')
+      const { url } = await api.service.run('serve')
+      // resolve server options
+      const projectDevServerOptions = Object.assign(
+        api.resolveWebpackConfig().devServer || {},
+        options.devServer
+      )
+      const protocol =
+        args.https || projectDevServerOptions.https ? 'https' : 'http'
+      const host =
+        args.host ||
+        process.env.HOST ||
+        projectDevServerOptions.host ||
+        '0.0.0.0'
+      let port = url.match(/:\d{4}\//)[0]
+      // Remove leading ":" and trailing "/"
+      port = port.substr(1, port.length - 2)
 
+      const networkUrl = getLanUrl(protocol, host, port, options.baseUrl)
       if (!networkUrl && platform === 'android') {
         // AVDs can connect to localhost of host computer
         console.log(
@@ -88,10 +105,7 @@ module.exports = (api, options) => {
           'Unable to host app on network. This is required to run a dev server on iOS.'
         )
       }
-      setCapacitorConfig(
-        platform,
-        networkUrl || `http://10.0.2.2${url.match(/:\d{4}\//)[0]}`
-      )
+      setCapacitorConfig(platform, networkUrl || `http://10.0.2.2${port}`)
 
       console.log(
         `\nLaunching ${
