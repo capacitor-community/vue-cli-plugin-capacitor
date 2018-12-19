@@ -13,7 +13,7 @@ module.exports = (api, options) => {
     },
     async args => {
       const path = require('path')
-      const outputDir = args.dest || pluginOptions.outputDir || 'dest'
+      const outputDir = args.dest || pluginOptions.outputDir || 'dist'
       args.dest = path.join(outputDir, 'bundled')
       // Uses platforms set in args or installed platforms
       const platforms = []
