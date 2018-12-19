@@ -11,7 +11,9 @@ module.exports = (api, options) => {
       usage: 'vue-cli-service capacitor:build --(android|ios)'
     },
     async args => {
+      const path = require('path')
       const outputDir = args.dest || pluginOptions.outputDir || 'dest'
+      args.dest = path.join(outputDir, 'bundled')
       // Uses platforms set in args or installed platforms
       const platforms = []
       if (args.android || args.ios) {
@@ -33,21 +35,52 @@ module.exports = (api, options) => {
       // Build app with Vue CLI
       await api.service.run('build', args)
       // Set web dir to build output
-      setCapacitorConfig('main config', false, api.resolve(outputDir))
+      setCapacitorConfig('main config', false, api.resolve(args.dest))
       for (const platform of platforms) {
         // Copy app
         await execa('cap', ['copy', platform], {
           stdio: 'inherit'
         })
-        console.log(
-          `\nLaunching ${
-            platform === 'android' ? 'Android Studio' : 'XCode'
-          }. Build your app here to finish.\n`
-        )
-        // Launch native studio to finish build
-        await execa('cap', ['open', platform], {
-          stdio: 'inherit'
-        })
+        if (args.ide || platform === 'ios') {
+          console.log(
+            `\nLaunching ${
+              platform === 'android' ? 'Android Studio' : 'XCode'
+            }. Build your app here to finish.\n`
+          )
+          // Launch native studio to finish build
+          await execa('cap', ['open', platform], {
+            stdio: 'inherit'
+          })
+        } else {
+          const basePath = api.resolve('android/app/build/outputs/apk/release')
+          // Remove old build output
+          await fs.remove(basePath)
+          console.log('Building native app')
+          await execa(
+            `./gradlew${process.platform === 'win32' ? '.bat' : ''}`,
+            ['assembleRelease'],
+            { stdio: 'inherit', cwd: api.resolve('android') }
+          )
+
+          // Copy built apk to dist folder
+          const unsignedPath = path.join(basePath, 'app-release-unsigned.apk')
+          const signedPath = path.join(basePath, 'app-release.apk')
+          if (await fs.exists(signedPath)) {
+            await fs.copy(
+              signedPath,
+              path.join(api.resolve(outputDir), 'app-release.apk')
+            )
+          } else if (await fs.exists(unsignedPath)) {
+            await fs.copy(
+              unsignedPath,
+              path.join(api.resolve(outputDir), 'app-release.apk')
+            )
+          } else {
+            console.log(
+              'Could not find outputted apk. Please resolve any errors with Capacitor. To run the build in Android Studio, pass the "--ide" argument to this command.'
+            )
+          }
+        }
       }
     }
   )
