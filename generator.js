@@ -32,9 +32,7 @@ module.exports = (api, { capacitor: answers }) => {
       await execa('cap', ['add', platform])
     }
     if (hasYarn()) {
-      if (await fs.exists(api.resolve('./package-lock.json'))) {
-        await fs.unlink(api.resolve('./package-lock.json'))
-      }
+      await fs.remove(api.resolve('./package-lock.json'))
       await execa('yarn', ['install'])
     }
   })
