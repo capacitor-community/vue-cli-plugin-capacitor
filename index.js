@@ -1,5 +1,6 @@
 const execa = require('execa')
 const fs = require('fs-extra')
+const { done, error, info, warn } = require('@vue/cli-shared-utils')
 
 module.exports = (api, options) => {
   const pluginOptions = options ? options.pluginOptions || {} : {}
@@ -42,7 +43,7 @@ module.exports = (api, options) => {
           stdio: 'inherit'
         })
         if (args.ide || platform === 'ios') {
-          console.log(
+          info(
             `\nLaunching ${
               platform === 'android' ? 'Android Studio' : 'XCode'
             }. Build your app here to finish.\n`
@@ -55,7 +56,7 @@ module.exports = (api, options) => {
           const basePath = api.resolve('android/app/build/outputs/apk/release')
           // Remove old build output
           await fs.remove(basePath)
-          console.log('Building native app')
+          info('Building native app')
           await execa(
             `./gradlew${process.platform === 'win32' ? '.bat' : ''}`,
             ['assembleRelease'],
@@ -76,11 +77,12 @@ module.exports = (api, options) => {
               path.join(api.resolve(outputDir), 'app-release.apk')
             )
           } else {
-            console.log(
+            error(
               'Could not find outputted apk. Please resolve any errors with Capacitor. To run the build in Android Studio, pass the "--ide" argument to this command.'
             )
           }
         }
+        done('Build Complete!')
       }
     }
   )
@@ -130,7 +132,7 @@ module.exports = (api, options) => {
       const networkUrl = getLanUrl(protocol, host, port, options.baseUrl)
       if (!networkUrl && platform === 'android') {
         // AVDs can connect to localhost of host computer
-        console.log(
+        warn(
           'WARNING! Network server is not available. App will only work on an AVD, not on a physical device'
         )
       } else if (!networkUrl) {
@@ -140,7 +142,7 @@ module.exports = (api, options) => {
       }
       setCapacitorConfig(platform, networkUrl || `http://10.0.2.2${port}`)
 
-      console.log(
+      info(
         `\nLaunching ${
           platform === 'android' ? 'Android Studio' : 'XCode'
         }. Run your app here, and it will automatically connect to the dev server.\n`
