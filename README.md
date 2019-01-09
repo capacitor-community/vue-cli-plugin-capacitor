@@ -6,9 +6,19 @@
 
 ## Install
 
-Open a terminal in the directory of a Vue CLI 3 project, or create one with `vue create my-app`.
+Open a terminal in the directory of a Vue CLI 3 project, or create one with `vue create my-app`, and run the following command:
 
-Install Vue CLI Plugin Capacitor with `vue add capacitor@next`
+Using [Yarn](https://yarnpkg.com) (recommended):
+
+```
+yarn add -D nklayman/vue-cli-plugin-capacitor && vue invoke capacitor
+```
+
+Using npm:
+
+```
+npm i -D nklayman/vue-cli-plugin-capacitor && vue invoke capacitor
+```
 
 ## Start a Live Dev Server
 
@@ -20,7 +30,7 @@ With [Yarn](https://yarnpkg.com):
 yarn capacitor:serve # add --android or --ios to specify a target platform
 ```
 
-Or with NPM:
+Or with npm:
 
 ```shell
 npm run capacitor:serve # add --android or --ios to specify a target platform
@@ -38,7 +48,7 @@ With Yarn:
 yarn capacitor:build # add --android and/or --ios to specify a target platform(s)
 ```
 
-Or with NPM:
+Or with npm:
 
 ```shell
 npm run capacitor:build # add --android and/or --ios to specify a target platform(s)
