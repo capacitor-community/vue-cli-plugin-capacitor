@@ -1,6 +1,5 @@
 const execa = require('execa')
 const fs = require('fs-extra')
-const { hasYarn } = require('@vue/cli-shared-utils')
 
 module.exports = (api, { capacitor: answers }) => {
   const pkg = {
@@ -9,12 +8,12 @@ module.exports = (api, { capacitor: answers }) => {
       'capacitor:serve': 'vue-cli-service capacitor:serve'
     },
     dependencies: {
-      '@capacitor/cli': '^1.0.0-beta.8',
-      '@capacitor/core': '^1.0.0-beta.8'
+      '@capacitor/cli': '^1.0.0',
+      '@capacitor/core': '^1.0.0'
     }
   }
   answers.platforms.forEach(platform => {
-    pkg.dependencies[`@capacitor/${platform}`] = '^1.0.0-beta.8'
+    pkg.dependencies[`@capacitor/${platform}`] = '^1.0.0'
   })
   api.extendPackage(pkg)
   api.onCreateComplete(async () => {
@@ -30,10 +29,6 @@ module.exports = (api, { capacitor: answers }) => {
     await fs.ensureFile(api.resolve('dist/index.html'))
     for (const platform of answers.platforms) {
       await execa('cap', ['add', platform])
-    }
-    if (hasYarn()) {
-      await fs.remove(api.resolve('./package-lock.json'))
-      await execa('yarn', ['install'])
     }
   })
 }

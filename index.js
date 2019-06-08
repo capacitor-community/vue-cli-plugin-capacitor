@@ -151,8 +151,6 @@ module.exports = (api, options) => {
       await execa('cap', ['open', platform], {
         stdio: 'inherit'
       })
-      // Exit when Android Studio/XCode is closed
-      process.exit(0)
     }
   )
   async function setCapacitorConfig (platform, serverUrl, webDir) {
