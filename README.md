@@ -8,16 +8,8 @@
 
 Open a terminal in the directory of a Vue CLI 3 project, or create one with `vue create my-app`, and run the following command:
 
-Using [Yarn](https://yarnpkg.com) (recommended):
-
-```
-yarn add -D nklayman/vue-cli-plugin-capacitor && vue invoke capacitor
-```
-
-Using npm:
-
-```
-npm i -D nklayman/vue-cli-plugin-capacitor && vue invoke capacitor
+```bash
+vue add @nklayman/capacitor
 ```
 
 ## Start a Live Dev Server
