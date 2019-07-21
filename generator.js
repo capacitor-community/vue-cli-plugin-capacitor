@@ -30,5 +30,17 @@ module.exports = (api, { capacitor: answers }) => {
     for (const platform of answers.platforms) {
       await execa('cap', ['add', platform])
     }
+    if (answers.platforms.includes('android')) {
+      const androidManifestPath = api.resolve(
+        'android/app/src/main/AndroidManifest.xml'
+      )
+      // Enable cleartext support in manifest
+      let androidManifest = await fs.readFile(androidManifestPath, 'utf8')
+      androidManifest = androidManifest.replace(
+        '<application',
+        '<application\n        android:usesCleartextTraffic="true"'
+      )
+      await fs.writeFile(androidManifestPath, androidManifest)
+    }
   })
 }
