@@ -12,6 +12,25 @@ Open a terminal in the directory of a Vue CLI 3 project, or create one with `vue
 vue add @nklayman/capacitor
 ```
 
+Then, configure Capacitor to [hide your app's splash screen](https://capacitor.ionicframework.com/docs/apis/splash-screen/#hiding-the-splash-screen) when VueJS is ready by adding the following code to your `src/app.js`:
+
+```diff
+import Vue from 'vue'
+import App from './App.vue'
++ import { Plugins } from 'capacitor'
++ const { SplashScreen } = Plugins
+
+Vue.config.productionTip = false
+
+new Vue({
+  render: h => h(App),
++ mounted() {
++   SplashScreen.hide()
++ }
+}).$mount('#app')
+
+```
+
 ## Start a Live Dev Server
 
 Start the dev server by running:
