@@ -107,6 +107,24 @@ module.exports = (api, options) => {
           platform = pluginOptions.defaultPlatform || 'android'
         }
       }
+      // Make sure cleartext is enabled
+      if (platform === 'android') {
+        const androidManifest = await fs.readFile(
+          api.resolve('android/app/src/main/AndroidManifest.xml'),
+          'utf8'
+        )
+        if (!androidManifest.match('android:usesCleartextTraffic="true"')) {
+          warn(
+            'Cleartext must be enabled to connect to the dev server on Android!'
+          )
+          warn(
+            'Add `android:usesCleartextTraffic="true"` to src-capacitor/android/app/src/main/AndroidManifest.xml in the `application` tag'
+          )
+          // TODO: actual url with instructions
+          // warn('See [need url] for more instructions')
+          process.exit(1)
+        }
+      }
       // Make sure there is an index.html, otherwise Capacitor will crash
       await fs.ensureFile(api.resolve('./dist/index.html'))
       // Copy app data
