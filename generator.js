@@ -8,12 +8,12 @@ module.exports = (api, { capacitor: answers }) => {
       'capacitor:serve': 'vue-cli-service capacitor:serve'
     },
     dependencies: {
-      '@capacitor/cli': '^1.0.0',
-      '@capacitor/core': '^1.0.0'
+      '@capacitor/cli': '^2.0.0',
+      '@capacitor/core': '^2.0.0'
     }
   }
   answers.platforms.forEach(platform => {
-    pkg.dependencies[`@capacitor/${platform}`] = '^1.0.0'
+    pkg.dependencies[`@capacitor/${platform}`] = '^2.0.0'
   })
   api.extendPackage(pkg)
   api.onCreateComplete(async () => {
