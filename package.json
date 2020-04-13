@@ -1,6 +1,6 @@
 {
   "name": "@nklayman/vue-cli-plugin-capacitor",
-  "version": "0.1.1",
+  "version": "0.3.0",
   "description": "A Vue CLI 3 Plugin for Capacitor",
   "main": "index.js",
   "repository": "https://github.com/nklayman/vue-cli-plugin-capacitor.git",
