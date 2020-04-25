@@ -147,7 +147,7 @@ module.exports = (api, options) => {
       // Remove leading ":" and trailing "/"
       port = port.substr(1, port.length - 2)
 
-      const networkUrl = getLanUrl(protocol, host, port, options.baseUrl)
+      let networkUrl = getLanUrl(protocol, host, port, options.baseUrl)
       if (!networkUrl && platform === 'android') {
         // AVDs can connect to localhost of host computer
         warn(
@@ -157,6 +157,8 @@ module.exports = (api, options) => {
         throw new Error(
           'Unable to host app on network. This is required to run a dev server on iOS.'
         )
+      } else {
+        networkUrl = networkUrl.replace(/\/$/, '')
       }
       setCapacitorConfig(platform, networkUrl || `http://10.0.2.2${port}`)
 
