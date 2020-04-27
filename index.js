@@ -34,7 +34,7 @@ module.exports = (api, options) => {
       }
 
       // Build app with Vue CLI
-      await api.service.run('build', args)
+      if (!args.skipBundle) await api.service.run('build', args)
       // Set web dir to build output
       setCapacitorConfig('main config', false, api.resolve(args.dest))
       for (const platform of platforms) {
