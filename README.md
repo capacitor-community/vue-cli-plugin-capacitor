@@ -17,7 +17,7 @@ Then, configure Capacitor to [hide your app's splash screen](https://capacitor.i
 ```diff
 import Vue from 'vue'
 import App from './App.vue'
-+ import { Plugins } from 'capacitor'
++ import { Plugins } from '@capacitor/core'
 + const { SplashScreen } = Plugins
 
 Vue.config.productionTip = false
