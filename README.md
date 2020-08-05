@@ -2,11 +2,9 @@
 
 > Turn your Vue SPA into an Android or iOS app with [Capacitor](https://capacitor.ionicframework.com/)
 
-**Note: Your app must be created with Vue CLI 3 (`vue create my-app`), not Vue CLI 2 (`vue init webpack my-app`)!**
-
 ## Install
 
-Open a terminal in the directory of a Vue CLI 3 project, or create one with `vue create my-app`, and run the following command:
+Open a terminal in the directory of a Vue CLI 3/4 project, or create one with `vue create my-app`, and run the following command:
 
 ```bash
 vue add @nklayman/capacitor
@@ -69,7 +67,7 @@ This will bundle your app, then open your native IDE (Android Studio or XCode). 
 
 ## Further Configuration
 
-To learn more about Capacitor and how to use it, visit [Capacitor's Website](https://capacitor.ionicframework.com/). This plugin simply provides an easy-to-use interface for Vue CLI 3.
+To learn more about Capacitor and how to use it, visit [Capacitor's Website](https://capacitor.ionicframework.com/). This plugin simply provides an easy-to-use interface for Vue CLI projects.
 
 ## How It Works
 
