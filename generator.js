@@ -28,7 +28,7 @@ module.exports = (api, { capacitor: answers }) => {
     )
     await fs.ensureFile(api.resolve('dist/index.html'))
     for (const platform of answers.platforms) {
-      await execa('cap', ['add', platform])
+      await execa('cap', ['add', platform], { preferLocal: true })
     }
     if (answers.platforms.includes('android')) {
       const androidManifestPath = api.resolve(
