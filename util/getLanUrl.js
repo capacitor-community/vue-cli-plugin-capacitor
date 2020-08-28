@@ -11,7 +11,7 @@ const address = require('address')
 
 module.exports = function getLanUrl (protocol, host, port, pathname = '/') {
   pathname = isAbsoluteUrl(pathname) ? '/' : pathname
-  const formatUrl = hostname =>
+  const formatUrl = (hostname) =>
     url.format({
       protocol,
       hostname,
@@ -51,5 +51,5 @@ module.exports = function getLanUrl (protocol, host, port, pathname = '/') {
 
 function isAbsoluteUrl (url) {
   // A URL is considered absolute if it begins with "<scheme>://" or "//"
-  return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url)
+  return /^([a-z][a-z\d+\-.]*:)?\/\//i.test(url)
 }

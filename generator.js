@@ -12,7 +12,7 @@ module.exports = (api, { capacitor: answers }) => {
       '@capacitor/core': '^2.0.0'
     }
   }
-  answers.platforms.forEach(platform => {
+  answers.platforms.forEach((platform) => {
     pkg.dependencies[`@capacitor/${platform}`] = '^2.0.0'
   })
   api.extendPackage(pkg)

@@ -7,6 +7,9 @@
   "author": "Noah Klayman <noahklayman@gmail.com>",
   "license": "MIT",
   "private": false,
+  "scripts": {
+    "lint": "eslint ."
+  },
   "dependencies": {
     "@vue/cli-shared-utils": "^4.5.4",
     "address": "^1.0.3",
