@@ -7,7 +7,7 @@
 Open a terminal in the directory of a Vue CLI 3/4 project, or create one with `vue create my-app`, and run the following command:
 
 ```bash
-vue add @nklayman/capacitor
+vue add capacitor
 ```
 
 Then, configure Capacitor to [hide your app's splash screen](https://capacitor.ionicframework.com/docs/apis/splash-screen/#hiding-the-splash-screen) when VueJS is ready by adding the following code to your `src/app.js`:
