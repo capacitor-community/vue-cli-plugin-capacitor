@@ -143,9 +143,7 @@ module.exports = (api, options) => {
         process.env.HOST ||
         projectDevServerOptions.host ||
         '0.0.0.0'
-      let port = url.match(/:\d{4}\//)[0]
-      // Remove leading ":" and trailing "/"
-      port = port.substr(1, port.length - 2)
+      let port = url.match(/:(\d{2,4})\/?/)[1]
 
       let networkUrl = getLanUrl(protocol, host, port, options.baseUrl)
       if (!networkUrl && platform === 'android') {
